@@ -1,0 +1,27 @@
+plugins {
+    id 'java'
+}
+
+group 'ru.alfabank.mobile.reactor.exx'
+version '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'io.projectreactor:reactor-core:3.4.12'
+    implementation 'ch.qos.logback:logback-classic:1.2.9'
+    implementation 'ch.qos.logback:logback-core:1.2.9'
+
+    testImplementation 'io.projectreactor:reactor-test:3.4.12'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+sourceCompatibility = 17
+targetCompatibility = 17
