@@ -1,4 +1,17 @@
 # reactor-exx
+## Как собрать проект в терминале
+Выберите 17 java, например, с помощью утилиты _sdkman_. В примере _17 java_ вендора _Corretto_
+```bash
+sdk use java 17.0.3.6.1-amzn
+```
+Запустите сборку _Gradle_ проекта. На Linux/MacOS
+```bash
+./gradlew clean build
+```
+На Windows
+```bash
+gradlew.bat clean build
+```
 
 ## Реактивные стримы
 * API
