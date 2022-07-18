@@ -30,7 +30,7 @@ import java.time.Duration;
  * such as when you have a high cardinality and
  * the concurrency of the flatMap consuming the groups is too low.
  */
-public class GroupByWithFlatMapTest {
+public class GroupByWithFlatMapStepsTest {
 
     /**
      * Все элементы успешно проходят через цепочку
