@@ -30,4 +30,17 @@ public class ZipTest {
         productInfo.zipWith(productPrice, "%s costs %s"::formatted)
                 .subscribe(out::printf);
     }
+
+    /**
+     * Продумали поведение при пустом Mono с оператором defaultIfEmpty,
+     * раздаём апельсины бесплатно!
+     */
+    @Test
+    void zipWithEmptyFixeStream() {
+        var productInfo = Mono.just("Orange");
+        var productPrice = Mono.empty()
+                .defaultIfEmpty(0);
+        productInfo.zipWith(productPrice, "%s costs %s"::formatted)
+                .subscribe(out::printf);
+    }
 }
