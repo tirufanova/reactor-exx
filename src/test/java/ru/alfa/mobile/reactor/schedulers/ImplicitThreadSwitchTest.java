@@ -21,6 +21,21 @@ public class ImplicitThreadSwitchTest {
                 .blockLast();
     }
 
+    @Test
+    void mergeDifferentThreads() {
+        Flux<Integer> parallelThreadFlux =
+                Flux.range(10, 2)
+                        .publishOn(Schedulers.parallel())
+                        .log("parallel");
+        Flux<Integer> testWorkerThreadFlux =
+                Flux.range(20, 2)
+                        .log("testWorker");
+
+        Flux.merge(parallelThreadFlux, testWorkerThreadFlux)
+                .log("merge")
+                .blockLast();
+    }
+
     /**
      * Смена потока не всегда происходит явно через операторы subscribeOn и publishOn.
      * Например, при использовании оператора flatMap (merge), тред реактивного потока может поменяться.
