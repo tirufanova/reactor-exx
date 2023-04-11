@@ -2,12 +2,24 @@ package ru.alfa.mobile.reactor.schedulers;
 
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Flux;
+import reactor.core.scheduler.Schedulers;
 
+import java.time.Duration;
 import java.util.function.Function;
 
 import static java.time.Duration.ofMillis;
 
 public class ImplicitThreadSwitchTest {
+
+    @Test
+    void delayElementsThread() {
+        Flux.range(0, 3)
+                .log("before")
+                .delayElements(Duration.ofNanos(5))
+                .log("after")
+                .take(2)
+                .blockLast();
+    }
 
     /**
      * Смена потока не всегда происходит явно через операторы subscribeOn и publishOn.
