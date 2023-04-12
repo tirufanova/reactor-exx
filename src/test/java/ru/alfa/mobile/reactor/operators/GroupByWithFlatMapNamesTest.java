@@ -14,7 +14,7 @@ import java.util.function.Function;
 public class GroupByWithFlatMapNamesTest {
 
     @Test
-    void completesNamesCountJustLog() {
+    void completeNamesCount() {
         Flux<String> namesFlux = Flux
                 .just("Carl", "Dan", "Adam", "Brian",
                         "Bruce", "Billy", "Alice");
@@ -32,7 +32,7 @@ public class GroupByWithFlatMapNamesTest {
     }
 
     @Test
-    void hangsNamesCountJustLog() {
+    void timeoutNamesCount() {
         Assertions.assertThrows(
                 IllegalStateException.class,
                 () -> {
@@ -58,7 +58,7 @@ public class GroupByWithFlatMapNamesTest {
     }
 
     @Test
-    void verifyCompletePassesNamesCount() {
+    void verifyCompleteNamesCount() {
         Flux<String> namesFlux = Flux
                 .just("Carl", "Dan", "Adam", "Brian",
                         "Bruce", "Billy", "Alice");
@@ -79,7 +79,7 @@ public class GroupByWithFlatMapNamesTest {
     }
 
     @Test
-    void verifyTimeoutPassesNamesCount() {
+    void verifyTimeoutNamesCount() {
         Flux<String> namesFlux = Flux
                 .just("Carl", "Dan", "Adam", "Brian",
                         "Bruce", "Billy", "Alice");
