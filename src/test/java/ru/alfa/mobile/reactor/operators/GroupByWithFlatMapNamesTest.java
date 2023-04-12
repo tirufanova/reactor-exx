@@ -16,8 +16,8 @@ public class GroupByWithFlatMapNamesTest {
     @Test
     void completesNamesCountJustLog() {
         Flux<String> namesFlux = Flux
-                .just("Adam", "Brian", "Alice",
-                        "Carl", "Chad", "Dan", "Ariel");
+                .just("Carl", "Dan", "Adam", "Brian",
+                        "Bruce", "Billy", "Alice");
 
         Function<GroupedFlux<Character, String>, Publisher<String>> countFunction =
                 (gFlux) -> gFlux.log("countFunction").count().map(count ->
@@ -37,15 +37,15 @@ public class GroupByWithFlatMapNamesTest {
                 IllegalStateException.class,
                 () -> {
                     Flux<String> namesFlux = Flux
-                            .just("Adam", "Brian", "Alice",
-                                    "Carl", "Chad", "Dan", "Ariel");
+                            .just("Carl", "Dan", "Adam", "Brian",
+                                    "Bruce", "Billy", "Alice");
 
                     Function<GroupedFlux<Character, String>, Publisher<String>> countFunction =
                             (gFlux) -> gFlux.count().log("countFunction").map(count ->
                                     "%s %s names".formatted(count, gFlux.key()));
 
                     int prefetch = 3;
-                    int concurrency = 2;
+                    int concurrency = 3;
 
                     namesFlux
                             .log("beforeGroupBy")
@@ -58,29 +58,10 @@ public class GroupByWithFlatMapNamesTest {
     }
 
     @Test
-    void verifyTimeoutPassesNamesCount() {
-        Flux<String> namesFlux = Flux
-                .just("Adam", "Brian", "Alice",
-                        "Carl", "Chad", "Dan", "Ariel");
-        Function<GroupedFlux<Character, String>, Publisher<String>> countNames =
-                (gFlux) -> gFlux.count().map(count ->
-                        "%s %s names".formatted(count, gFlux.key()));
-
-        int prefetch = 3;
-        int concurrency = 2;
-        Flux<String> countedNamesFlux = namesFlux
-                .groupBy(name -> name.charAt(0), prefetch)
-                .flatMap(countNames, concurrency);
-
-        StepVerifier.create(countedNamesFlux)
-                .verifyTimeout(Duration.ofSeconds(5));
-    }
-
-    @Test
     void verifyCompletePassesNamesCount() {
         Flux<String> namesFlux = Flux
-                .just("Adam", "Brian", "Alice",
-                        "Carl", "Chad", "Dan", "Ariel");
+                .just("Carl", "Dan", "Adam", "Brian",
+                        "Bruce", "Billy", "Alice");
         Function<GroupedFlux<Character, String>, Publisher<String>> countFunction =
                 (gFlux) -> gFlux.count().map(count ->
                         "%s %s names".formatted(count, gFlux.key()));
@@ -90,10 +71,29 @@ public class GroupByWithFlatMapNamesTest {
                 .flatMap(countFunction);
 
         StepVerifier.create(countedNamesFlux)
-                .expectNext("3 A names")
-                .expectNext("1 B names")
-                .expectNext("2 C names")
+                .expectNext("2 A names")
+                .expectNext("3 B names")
+                .expectNext("1 C names")
                 .expectNext("1 D names")
                 .verifyComplete();
+    }
+
+    @Test
+    void verifyTimeoutPassesNamesCount() {
+        Flux<String> namesFlux = Flux
+                .just("Carl", "Dan", "Adam", "Brian",
+                        "Bruce", "Billy", "Alice");
+        Function<GroupedFlux<Character, String>, Publisher<String>> countNames =
+                (gFlux) -> gFlux.count().map(count ->
+                        "%s %s names".formatted(count, gFlux.key()));
+
+        int prefetch = 3;
+        int concurrency = 3;
+        Flux<String> countedNamesFlux = namesFlux
+                .groupBy(name -> name.charAt(0), prefetch)
+                .flatMap(countNames, concurrency);
+
+        StepVerifier.create(countedNamesFlux)
+                .verifyTimeout(Duration.ofSeconds(5));
     }
 }
